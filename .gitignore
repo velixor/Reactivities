@@ -1,0 +1,7 @@
+﻿bin
+obj
+.vscode
+.idea
+.db_store
+appsettings.json
+*.db
