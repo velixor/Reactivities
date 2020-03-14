@@ -3,5 +3,5 @@ obj
 .vscode
 .idea
 .db_store
-appsettings.json
+appsettings.Development.json
 *.db
