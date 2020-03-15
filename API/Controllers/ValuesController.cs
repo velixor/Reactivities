@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 using JetBrains.Annotations;
@@ -21,14 +20,16 @@ namespace API.Controllers
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
         }
 
-        [HttpGet, PublicAPI]
+        [HttpGet]
+        [PublicAPI]
         public async Task<ActionResult<IEnumerable<Value>>> GetAsync()
         {
             var values = await _dataContext.Values.ToListAsync().ConfigureAwait(false);
             return Ok(values);
         }
 
-        [HttpGet("{id}"), PublicAPI]
+        [HttpGet("{id}")]
+        [PublicAPI]
         public async Task<ActionResult<Value>> GetActionAsync(int id)
         {
             var value = await _dataContext.Values.SingleAsync(x => x.Id == id).ConfigureAwait(false);
