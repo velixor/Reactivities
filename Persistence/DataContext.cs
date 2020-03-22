@@ -1,15 +1,15 @@
 ﻿using Domain;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions options) : base(options)
-        {
-        }
+        public DataContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Value> Values { get; set; }
+        public DbSet<Value> Values { get; [UsedImplicitly] set; }
+        public DbSet<Activity> Activities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
