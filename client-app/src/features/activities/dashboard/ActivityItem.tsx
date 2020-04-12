@@ -3,12 +3,14 @@ import {IActivity} from "../../../app/models/activity";
 import {Button,Item,Label} from "semantic-ui-react";
 
 interface IProps {
-    activity: IActivity
+    activity: IActivity;
+    setSelectedActivity: (activity: IActivity) => void;
+    deleteActivity: (id: string) => void;
 }
 
-const ActivityItem: React.FC<IProps> = ({activity}) => {
+const ActivityItem: React.FC<IProps> = ({activity,setSelectedActivity,deleteActivity}) => {
     return (
-        <Item key={activity.id}>
+        <Item>
             <Item.Content>
                 <Item.Header as='a'>{activity.title}</Item.Header>
                 <Item.Meta>{activity.date}</Item.Meta>
@@ -17,7 +19,12 @@ const ActivityItem: React.FC<IProps> = ({activity}) => {
                     <div>{activity.city}, {activity.venue}</div>
                 </Item.Description>
                 <Item.Extra>
-                    <Button floated='right' content='View' color='blue'/>
+                    <Button
+                        onClick={() => setSelectedActivity(activity)}
+                        floated='right'
+                        content='View'
+                        color='blue'/>
+                    <Button onClick={() => deleteActivity(activity.id)} floated='right' content='Delete' color='red'/>
                     <Label basic content={activity.category}/>
                 </Item.Extra>
             </Item.Content>

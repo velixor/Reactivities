@@ -6,20 +6,61 @@ import NavBar from "../../features/nav/NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 
 const App = () => {
-    const [activities,setState] = useState<IActivity[]>([]);
+    const [activities,setActivities] = useState<IActivity[]>([]);
+    const [selectedActivity,setSelectedActivity] = useState<IActivity | null>(null);
+    const [editMode,setEditMode] = useState(false);
 
     useEffect(() => {
         axios.get<IActivity[]>("http://localhost:5000/api/activities")
              .then((response) => {
-                 setState(response.data);
+                 let activities = response.data;
+                 activities.forEach(a => {
+                     a.date = a.date.split('.')[0];
+                 });
+                 setActivities(response.data);
              });
     },[]);
 
+    const handleSelectActivity = (activity: IActivity | null) => {
+        if (activity)
+            setSelectedActivity(activity);
+        setEditMode(false);
+    };
+    const handleOpenCreateActivityForm = () => {
+        setSelectedActivity(null);
+        setEditMode(true);
+    };
+    const handleCreateActivity = (activity: IActivity) => {
+        setActivities([...activities,activity]);
+        setSelectedActivity(activity);
+        setEditMode(false);
+    };
+    const handleEditActivity = (activity: IActivity) => {
+        setActivities([...activities.filter(a => a.id !== activity.id),activity]);
+        setSelectedActivity(activity);
+        setEditMode(false);
+    };
+
+    const handleDeleteActivity = (id: string) => {
+        setActivities([...activities.filter(a => a.id !== id)]);
+    };
+
     return (
         <Fragment>
-            <NavBar/>
+            <NavBar openCreateActivityForm={handleOpenCreateActivityForm}/>
             <Container style={{marginTop: '7em'}}>
-                <ActivityDashboard activities={activities}/>
+                {activities.length > 0
+                    ? <ActivityDashboard
+                        activities={activities}
+                        selectedActivity={selectedActivity}
+                        editMode={editMode}
+                        setSelectedActivity={handleSelectActivity}
+                        setEditMode={setEditMode}
+                        createActivity={handleCreateActivity}
+                        editActivity={handleEditActivity}
+                        deleteActivity={handleDeleteActivity}
+                    />
+                    : <label>No Activities available</label>}
             </Container>
         </Fragment>
     );

@@ -4,15 +4,18 @@ import {IActivity} from "../../../app/models/activity";
 import ActivityItem from "./ActivityItem";
 
 interface IProps {
-    activities: IActivity[]
+    activities: IActivity[];
+    setSelectedActivity: (activity: IActivity) => void;
+    deleteActivity: (id: string) => void;
 }
 
-const ActivityList: React.FC<IProps> = ({activities}) => {
+const ActivityList: React.FC<IProps> = ({activities,setSelectedActivity,deleteActivity}) => {
     return (
         <Segment>
             <Item.Group divided>
                 {activities.map(activity => (
-                    <ActivityItem activity={activity}/>
+                    <ActivityItem key={activity.id} activity={activity} setSelectedActivity={setSelectedActivity}
+                                  deleteActivity={deleteActivity}/>
                 ))}
             </Item.Group>
         </Segment>
