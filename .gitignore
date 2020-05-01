@@ -5,3 +5,4 @@ obj
 .db_store
 appsettings.Development.json
 *.db
+/original.zip
