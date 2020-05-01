@@ -3,6 +3,7 @@ import {Grid} from "semantic-ui-react";
 import {IActivity} from "../../../app/models/activity";
 import ActivityDetails from "./details/ActivityDetails";
 import ActivityForm from "./form/ActivityForm";
+import ActivityList from "./ActivityList";
 
 interface IProps {
     activities: IActivity[];
@@ -19,6 +20,8 @@ const ActivityDashboard: React.FC<IProps> = (p) => {
     return (
         <Grid>
             <Grid.Column width={10}>
+                <ActivityList activities={p.activities} setSelectedActivity={p.setSelectedActivity}
+                              deleteActivity={p.deleteActivity}/>
             </Grid.Column>
             <Grid.Column width={6}>
                 {p.editMode
