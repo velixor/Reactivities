@@ -1,43 +1,26 @@
-import React, {SyntheticEvent} from 'react'
+import React, {useContext} from 'react'
 import {Grid} from "semantic-ui-react";
-import {IActivity} from "../../../app/models/activity";
 import ActivityDetails from "./details/ActivityDetails";
 import ActivityForm from "./form/ActivityForm";
 import ActivityList from "./ActivityList";
+import {observer} from "mobx-react-lite";
+import activityStore from "../../../app/stores/activityStore";
 
-interface IProps {
-    activities: IActivity[];
-    selectedActivity: IActivity | null;
-    editMode: boolean;
-    setSelectedActivity: (activity: IActivity | null) => void;
-    setEditMode: (editMode: boolean) => void;
-    createActivity: (activity: IActivity) => void;
-    editActivity: (activity: IActivity) => void;
-    deleteActivity: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-    submitting: boolean;
-    target: string
-}
 
-const ActivityDashboard: React.FC<IProps> = (p) => {
+const ActivityDashboard = () => {
+    const store = useContext(activityStore)
     return (
         <Grid>
             <Grid.Column width={10}>
-                <ActivityList activities={p.activities} setSelectedActivity={p.setSelectedActivity}
-                              deleteActivity={p.deleteActivity} submitting={p.submitting} target={p.target}/>
+                <ActivityList/>
             </Grid.Column>
             <Grid.Column width={6}>
-                {p.editMode
-                    ? <ActivityForm key={p.selectedActivity ? p.selectedActivity.id : 0} setEditMode={p.setEditMode}
-                                    activity={p.selectedActivity!}
-                                    createActivity={p.createActivity} editActivity={p.editActivity}
-                                    submitting={p.submitting}/>
-                    : p.selectedActivity && <ActivityDetails activity={p.selectedActivity}
-                                                             setEditMode={p.setEditMode}
-                                                             setSelectedActivity={p.setSelectedActivity}/>}
-
+                {store.editMode
+                    ? <ActivityForm key={store.selectedActivity ? store.selectedActivity.id : 0}/>
+                    : store.selectedActivity && <ActivityDetails activity={store.selectedActivity}/>}
             </Grid.Column>
         </Grid>
     )
 };
 
-export default ActivityDashboard
+export default observer(ActivityDashboard)

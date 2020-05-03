@@ -1,40 +1,39 @@
-import React, {SyntheticEvent} from 'react'
+import React, {useContext} from 'react'
 import {IActivity} from "../../../app/models/activity";
 import {Button, Item, Label} from "semantic-ui-react";
+import activityStore from "../../../app/stores/activityStore";
+import {observer} from "mobx-react-lite";
 
 interface IProps {
     activity: IActivity;
-    setSelectedActivity: (activity: IActivity) => void;
-    deleteActivity: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-    submitting: boolean;
-    target: string;
 }
 
-const ActivityItem: React.FC<IProps> = (p) => {
+const ActivityItem: React.FC<IProps> = ({activity}) => {
+    const store = useContext(activityStore);
     return (
         <Item>
             <Item.Content>
-                <Item.Header as='a'>{p.activity.title}</Item.Header>
-                <Item.Meta>{p.activity.date}</Item.Meta>
+                <Item.Header as='a'>{activity.title}</Item.Header>
+                <Item.Meta>{activity.date}</Item.Meta>
                 <Item.Description>
-                    <div>{p.activity.description}</div>
-                    <div>{p.activity.city}, {p.activity.venue}</div>
+                    <div>{activity.description}</div>
+                    <div>{activity.city}, {activity.venue}</div>
                 </Item.Description>
                 <Item.Extra>
                     <Button
-                        onClick={() => p.setSelectedActivity(p.activity)}
+                        onClick={() => store.selectActivity(activity)}
                         floated='right'
                         content='View'
                         color='blue'/>
-                    <Button name={p.activity.id} loading={p.submitting && p.target == p.activity.id}
-                            onClick={(e) => p.deleteActivity(e, p.activity.id)}
+                    <Button name={activity.id} loading={store.submitting && store.target === activity.id}
+                            onClick={() => store.deleteActivity(activity.id)}
                             floated='right'
                             content='Delete' color='red'/>
-                    <Label basic content={p.activity.category}/>
+                    <Label basic content={activity.category}/>
                 </Item.Extra>
             </Item.Content>
         </Item>
     )
 };
 
-export default ActivityItem
+export default observer(ActivityItem);
