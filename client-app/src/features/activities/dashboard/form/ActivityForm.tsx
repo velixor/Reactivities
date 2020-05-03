@@ -1,5 +1,5 @@
-import React,{FormEvent,useState} from 'react'
-import {Button,Form,Segment} from "semantic-ui-react";
+import React, {FormEvent, useState} from 'react'
+import {Button, Form, Segment} from "semantic-ui-react";
 import {IActivity} from "../../../../app/models/activity";
 import {v4 as uuid} from 'uuid';
 
@@ -8,6 +8,7 @@ interface IProps {
     activity: IActivity;
     createActivity: (activity: IActivity) => void;
     editActivity: (activity: IActivity) => void;
+    submitting: boolean;
 }
 
 const ActivityForm: React.FC<IProps> = (p) => {
@@ -24,16 +25,16 @@ const ActivityForm: React.FC<IProps> = (p) => {
         };
     };
 
-    const [activity,setActivity] = useState(initializeForm);
+    const [activity, setActivity] = useState(initializeForm);
 
     const handleInputChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name,value} = event.currentTarget;
-        setActivity({...activity,[name]: value});
+        const {name, value} = event.currentTarget;
+        setActivity({...activity, [name]: value});
     };
 
     const handleSubmit = () => {
         if (activity.id.length === 0) {
-            let newActivity = {...activity,id: uuid()};
+            let newActivity = {...activity, id: uuid()};
             p.createActivity(newActivity);
         } else
             p.editActivity(activity);
@@ -51,7 +52,7 @@ const ActivityForm: React.FC<IProps> = (p) => {
                             value={activity.date}/>
                 <Form.Input onChange={handleInputChange} name='city' placeholder='City' value={activity.city}/>
                 <Form.Input onChange={handleInputChange} name='venue' placeholder='Venue' value={activity.venue}/>
-                <Button floated='right' positive type='submit' content='Submit'/>
+                <Button loading={p.submitting} floated='right' positive type='submit' content='Submit'/>
                 <Button onClick={() => p.setEditMode(false)} floated='right' type='button' content='Cancel'/>
             </Form>
         </Segment>
