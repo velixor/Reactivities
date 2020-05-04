@@ -8,7 +8,7 @@ import activityStore from "../../../app/stores/activityStore";
 
 
 const ActivityDashboard = () => {
-    const store = useContext(activityStore)
+    const store = useContext(activityStore);
     return (
         <Grid>
             <Grid.Column width={10}>

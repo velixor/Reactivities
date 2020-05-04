@@ -1,7 +1,9 @@
-import {action, computed, observable} from "mobx";
+import {action, computed, configure, observable, runInAction} from "mobx";
 import {createContext} from "react";
 import {IActivity} from "../models/activity";
 import agent from "../api/agent";
+
+configure({enforceActions: 'always'});
 
 class activityStore {
     @observable activitiesRegistry = new Map();
@@ -20,40 +22,49 @@ class activityStore {
         try {
             this.loadingInitial = true;
             const activities = await agent.Activities.list();
-            activities.forEach((activity) => {
-                activity.date = activity.date.split('.')[0];
-                this.activitiesRegistry.set(activity.id, activity);
+            runInAction(() => {
+                activities.forEach((activity) => {
+                    activity.date = activity.date.split('.')[0];
+                    this.activitiesRegistry.set(activity.id, activity);
+                });
             });
         } catch (e) {
             console.log(e);
         }
-        this.loadingInitial = false;
+        runInAction(() => {
+            this.loadingInitial = false;
+        });
     };
     @action createActivity = async (activity: IActivity) => {
         this.setSubmitting(true);
         await agent.Activities.create(activity);
-        this.activitiesRegistry.set(activity.id, activity);
-        this.selectActivity(activity);
-        this.setEditMode(false);
-        this.setSubmitting(false);
+        runInAction('creatingAction', () => {
+            this.activitiesRegistry.set(activity.id, activity);
+            this.selectActivity(activity);
+            this.setEditMode(false);
+            this.setSubmitting(false);
+        });
     };
     @action deleteActivity = async (id: string) => {
         this.setTarget(id);
         this.setSubmitting(true);
         await agent.Activities.delete(id);
-        this.activitiesRegistry.delete(id);
-        if (this.selectedActivity && this.selectedActivity.id === id)
-            this.selectActivity();
-        this.setSubmitting(false);
+        runInAction('deletingAction', () => {
+            this.activitiesRegistry.delete(id);
+            if (this.selectedActivity && this.selectedActivity.id === id)
+                this.selectActivity();
+            this.setSubmitting(false);
+        });
     };
     @action editActivity = async (activity: IActivity) => {
         this.setSubmitting(true);
-        await agent.Activities.update(activity)
-        this.activitiesRegistry.delete(activity.id)
-        this.activitiesRegistry.set(activity.id, activity);
-        this.selectActivity(activity);
-        this.setEditMode(false);
-        this.setSubmitting(false);
+        await agent.Activities.update(activity);
+        runInAction('editingAction', () => {
+            this.activitiesRegistry.set(activity.id, activity);
+            this.selectActivity(activity);
+            this.setEditMode(false);
+            this.setSubmitting(false);
+        });
     };
 
     @action selectActivity = (activity?: IActivity) => {
