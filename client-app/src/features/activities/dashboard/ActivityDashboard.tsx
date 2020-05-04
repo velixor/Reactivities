@@ -16,8 +16,8 @@ const ActivityDashboard = () => {
             </Grid.Column>
             <Grid.Column width={6}>
                 {store.editMode
-                    ? <ActivityForm key={store.selectedActivity ? store.selectedActivity.id : 0}/>
-                    : store.selectedActivity && <ActivityDetails activity={store.selectedActivity}/>}
+                    ? <ActivityForm key={store.activity ? store.activity.id : 0}/>
+                    : store.activity && <ActivityDetails activity={store.activity}/>}
             </Grid.Column>
         </Grid>
     )

@@ -10,7 +10,7 @@ const ActivityForm = () => {
     const store = useContext(activityStore);
 
     const initializeForm = (): IActivity => {
-        if (store.selectedActivity) return store.selectedActivity;
+        if (store.activity) return store.activity;
         else
             return {
                 id: '',

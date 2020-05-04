@@ -3,6 +3,7 @@ import {IActivity} from "../../../app/models/activity";
 import {Button, Item, Label} from "semantic-ui-react";
 import activityStore from "../../../app/stores/activityStore";
 import {observer} from "mobx-react-lite";
+import {Link} from "react-router-dom";
 
 interface IProps {
     activity: IActivity;
@@ -21,7 +22,7 @@ const ActivityItem: React.FC<IProps> = ({activity}) => {
                 </Item.Description>
                 <Item.Extra>
                     <Button
-                        onClick={() => store.selectActivity(activity)}
+                        as={Link} to={`activities/${activity.id}`}
                         floated='right'
                         content='View'
                         color='blue'/>
