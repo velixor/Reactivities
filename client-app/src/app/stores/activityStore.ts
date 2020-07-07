@@ -37,14 +37,23 @@ class activityStore {
     };
     @action loadActivity = async (id: string) => {
         let activity = this.activitiesRegistry.get(id);
-        if (activity === undefined) {
-            this.loadingInitial = true;
-            activity = await agent.Activities.details(id);
-            runInAction(() => this.loadingInitial = false);
-        }
-        runInAction(() => {
+        if (activity) {
             this.activity = activity;
-        })
+        } else {
+            try {
+                this.loadingInitial = true;
+                activity = await agent.Activities.details(id);
+                runInAction('getting activity', () => {
+                    this.activity = activity;
+                    this.loadingInitial = false;
+                });
+            } catch (error) {
+                runInAction('get activity error', () => {
+                    this.loadingInitial = false;
+                });
+                console.log(error);
+            }
+        }
     };
     @action createActivity = async (activity: IActivity) => {
         this.setSubmitting(true);

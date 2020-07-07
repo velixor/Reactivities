@@ -26,9 +26,9 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Activity> Single(Guid id)
+        public async Task<Activity> Single([FromRoute] Details.Query detailsQuery)
         {
-            return await _mediator.Send(new Details.Query {Id = id});
+            return await _mediator.Send(detailsQuery);
         }
 
         [HttpPost]
@@ -38,9 +38,9 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> Delete(Guid id)
+        public async Task<ActionResult<Unit>> Delete([FromRoute] Delete.Command deleteCommand)
         {
-            return await _mediator.Send(new Delete.Command {Id = id});
+            return await _mediator.Send(deleteCommand);
         }
 
         [HttpPut("{id}")]
