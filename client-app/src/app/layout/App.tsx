@@ -26,7 +26,7 @@ const App = () => {
                 <Route exact path='/' component={HomePage}></Route>
                 <Route exact path='/activities' component={ActivityDashboard}></Route>
                 <Route path='/activities/:id' component={ActivityDetails}></Route>
-                <Route path='/createActivity' component={ActivityForm}></Route>
+                <Route path={['/createActivity', "/manage/:id"]} component={ActivityForm}></Route>
             </Container>
         </Fragment>
     );

@@ -1,29 +1,32 @@
-import React, {FormEvent, useContext, useState} from 'react'
+import React, {FormEvent, useContext, useEffect, useState} from 'react'
 import {Button, Form, Segment} from "semantic-ui-react";
-import {IActivity} from "../../../../app/models/activity";
 import {v4 as uuid} from 'uuid';
 import activityStore from "../../../../app/stores/activityStore";
 import {observer} from "mobx-react-lite";
+import {RouteComponentProps} from 'react-router-dom';
 
+interface DetailParams {
+    id: string;
+}
 
-const ActivityForm = () => {
+const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
     const store = useContext(activityStore);
 
-    const initializeForm = (): IActivity => {
-        if (store.activity) return store.activity;
-        else
-            return {
-                id: '',
-                title: '',
-                description: '',
-                category: '',
-                date: '',
-                city: '',
-                venue: ''
-            };
-    };
+    useEffect(() => {
+        if (match.params.id) {
+            store.loadActivity(match.params.id).then(() => store.activity && setActivity(store.activity));
+        }
+    });
 
-    const [activity, setActivity] = useState(initializeForm);
+    const [activity, setActivity] = useState({
+        id: '',
+        title: '',
+        description: '',
+        category: '',
+        date: '',
+        city: '',
+        venue: ''
+    });
 
     const handleInputChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = event.currentTarget;

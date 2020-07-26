@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react'
 import {Button, Card, Image} from "semantic-ui-react";
 import {observer} from "mobx-react-lite";
 import activityStore from "../../../../app/stores/activityStore";
-import {RouteComponentProps} from 'react-router-dom';
+import {Link, RouteComponentProps} from 'react-router-dom';
 import LoadingComponent from "../../../LoadingComponent";
 
 interface DetailParams {
@@ -33,7 +33,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
             </Card.Content>
             <Card.Content extra>
                 <Button.Group widths={2}>
-                    <Button onClick={() => store.setEditMode(true)} basic color='blue' content='Edit'/>
+                    <Button as={Link} to={`/manage/${activity.id}`} basic color='blue' content='Edit'/>
                     <Button onClick={() => {
                         store.selectActivity();
                         history.push('/activities')
