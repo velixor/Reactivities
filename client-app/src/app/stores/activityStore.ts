@@ -7,7 +7,7 @@ configure({enforceActions: 'always'});
 
 class activityStore {
     @observable activitiesRegistry = new Map();
-    @observable activity: IActivity | undefined;
+    @observable activity: IActivity | null = null;
     @observable loadingInitial = false;
     @observable editMode = false;
     @observable submitting = false;
@@ -55,6 +55,9 @@ class activityStore {
             }
         }
     };
+    @action clearActivity = () => {
+        this.activity = null;
+    }
     @action createActivity = async (activity: IActivity) => {
         this.setSubmitting(true);
         await agent.Activities.create(activity);
@@ -72,7 +75,7 @@ class activityStore {
         runInAction('deletingAction', () => {
             this.activitiesRegistry.delete(id);
             if (this.activity && this.activity.id === id)
-                this.selectActivity();
+                this.clearActivity();
             this.setSubmitting(false);
         });
     };
@@ -87,12 +90,12 @@ class activityStore {
         });
     };
 
-    @action selectActivity = (activity?: IActivity) => {
+    @action selectActivity = (activity: IActivity) => {
         this.activity = activity;
         this.editMode = false;
     };
     @action openCreateActivityForm = () => {
-        this.selectActivity();
+        this.clearActivity();
         this.setEditMode(true);
     };
     @action setEditMode = (editMode: boolean) => this.editMode = editMode;

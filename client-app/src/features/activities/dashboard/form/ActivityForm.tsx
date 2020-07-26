@@ -9,14 +9,8 @@ interface DetailParams {
     id: string;
 }
 
-const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
+const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
     const store = useContext(activityStore);
-
-    useEffect(() => {
-        if (match.params.id) {
-            store.loadActivity(match.params.id).then(() => store.activity && setActivity(store.activity));
-        }
-    });
 
     const [activity, setActivity] = useState({
         id: '',
@@ -28,17 +22,27 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
         venue: ''
     });
 
+    useEffect(() => {
+        if (match.params.id && activity.id.length === 0) {
+            store.loadActivity(match.params.id).then(() => store.activity && setActivity(store.activity));
+        }
+        return () => {
+            store.clearActivity();
+        };
+    }, [store.loadActivity, match.params.id, store.clearActivity, store.activity, activity.id.length, store]);
+
     const handleInputChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = event.currentTarget;
         setActivity({...activity, [name]: value});
     };
 
     const handleSubmit = async () => {
+        const pushHistory = (activityId: string) => history.push(`/activities/${activityId}`);
         if (activity.id.length === 0) {
             let newActivity = {...activity, id: uuid()};
-            await store.createActivity(newActivity);
+            await store.createActivity(newActivity).then(() => pushHistory(newActivity.id));
         } else
-            await store.editActivity(activity);
+            await store.editActivity(activity).then(() => pushHistory(activity.id));
     };
 
     return (

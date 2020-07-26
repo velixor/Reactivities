@@ -15,7 +15,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
     useEffect(() => {
         loadActivity(match.params.id);
-    }, [loadActivity]);
+    }, [loadActivity, match.params.id]);
 
     if (loadingInitial || !activity) return <LoadingComponent content='Loading activity...'/>
 
@@ -35,7 +35,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                 <Button.Group widths={2}>
                     <Button as={Link} to={`/manage/${activity.id}`} basic color='blue' content='Edit'/>
                     <Button onClick={() => {
-                        store.selectActivity();
+                        store.clearActivity();
                         history.push('/activities')
                     }} basic color='grey' content='Cancel'/>
                 </Button.Group>
