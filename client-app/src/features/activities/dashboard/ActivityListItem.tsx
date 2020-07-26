@@ -1,7 +1,6 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {IActivity} from "../../../app/models/activity";
 import {Button, Item, Label} from "semantic-ui-react";
-import activityStore from "../../../app/stores/activityStore";
 import {observer} from "mobx-react-lite";
 import {Link} from "react-router-dom";
 
@@ -9,8 +8,7 @@ interface IProps {
     activity: IActivity;
 }
 
-const ActivityItem: React.FC<IProps> = ({activity}) => {
-    const store = useContext(activityStore);
+const ActivityListItem: React.FC<IProps> = ({activity}) => {
     return (
         <Item>
             <Item.Content>
@@ -26,10 +24,6 @@ const ActivityItem: React.FC<IProps> = ({activity}) => {
                         floated='right'
                         content='View'
                         color='blue'/>
-                    <Button name={activity.id} loading={store.submitting && store.target === activity.id}
-                            onClick={() => store.deleteActivity(activity.id)}
-                            floated='right'
-                            content='Delete' color='red'/>
                     <Label basic content={activity.category}/>
                 </Item.Extra>
             </Item.Content>
@@ -37,4 +31,4 @@ const ActivityItem: React.FC<IProps> = ({activity}) => {
     )
 };
 
-export default observer(ActivityItem);
+export default observer(ActivityListItem);
