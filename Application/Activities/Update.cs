@@ -1,23 +1,37 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
 using Persistence;
 
 namespace Application.Activities
 {
-    public class Update
+    public abstract class Update
     {
         public class Command : IRequest
         {
-            public Guid Id { get; set; }
-            public string Title { get; set; }
-            public string Description { get; set; }
-            public string Category { get; set; }
-            public DateTime? Date { get; set; }
-            public string City { get; set; }
-            public string Venue { get; set; }
+            public Guid Id { get; [UsedImplicitly] set; }
+            public string Title { get; [UsedImplicitly] set; }
+            public string Description { get; [UsedImplicitly] set; }
+            public string Category { get; [UsedImplicitly] set; }
+            public DateTime? Date { get; [UsedImplicitly] set; }
+            public string City { get; [UsedImplicitly] set; }
+            public string Venue { get; [UsedImplicitly] set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Create.Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Category).NotEmpty();
+                RuleFor(x => x.Date).NotEmpty();
+                RuleFor(x => x.City).NotEmpty();
+                RuleFor(x => x.Venue).NotEmpty();
+            }
         }
 
         [UsedImplicitly]

@@ -1,4 +1,5 @@
 using Application.Activities;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,11 +22,9 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
-            services.AddControllers();
+            services.AddDbContext<DataContext>(opt => { opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });
+            services.AddControllers()
+                .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>());
 
             services.AddCors(opt =>
             {
