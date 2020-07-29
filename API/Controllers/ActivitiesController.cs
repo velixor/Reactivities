@@ -45,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Unit>> Update(Guid id, [FromBody] Update.Command command)
+        public async Task<ActionResult<Unit>> Update(Guid id, [FromBody] Edit.Command command)
         {
             command.Id = id;
             return await _mediator.Send(command);

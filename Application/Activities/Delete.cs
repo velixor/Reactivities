@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using JetBrains.Annotations;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -28,14 +31,14 @@ namespace Application.Activities
             {
                 var activity = await _context.Activities.FindAsync(request.Id);
                 if (activity == null)
-                    throw new Exception("Activity not found");
+                    throw new ActivityNotFoundException();
 
                 _context.Activities.Remove(activity);
 
                 var isSavedSuccess = await _context.SaveChangesAsync(cancellationToken) > 0;
                 if (isSavedSuccess) return Unit.Value;
 
-                throw new Exception("Problem saving changes");
+                throw new DbUpdateException("Problem saving changes");
             }
         }
     }

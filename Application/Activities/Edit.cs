@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
@@ -8,7 +9,7 @@ using Persistence;
 
 namespace Application.Activities
 {
-    public abstract class Update
+    public abstract class Edit
     {
         public class Command : IRequest
         {
@@ -46,8 +47,8 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
-                if (activity == null) throw new Exception("Activity not found");
+                var activity = await _context.Activities.FindAsync(request.Id)
+                    ?? throw new ActivityNotFoundException();
 
                 activity.Category = request.Category ?? activity.Category;
                 activity.City = request.City ?? activity.City;
