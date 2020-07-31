@@ -6,3 +6,7 @@ obj
 appsettings.Development.json
 *.db
 /original.zip
+/.vs/Reactivities/DesignTimeBuild/.dtbcache.v2
+/.vs/Reactivities/v16/.suo
+/API/API.csproj.user
+/.vs/Reactivities/config/applicationhost.config
