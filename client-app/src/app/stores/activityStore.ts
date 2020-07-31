@@ -37,12 +37,15 @@ class activityStore {
                 });
             });
             console.log(this.groupActivitiesByDate(activities));
+            runInAction("getting activities", () => {
+                this.loadingInitial = false;
+            });
         } catch (e) {
             console.log(e);
+            runInAction("get activities error", () => {
+                this.loadingInitial = false;
+            });
         }
-        runInAction(() => {
-            this.loadingInitial = false;
-        });
     };
     @action loadActivity = async (id: string) => {
         let activity = this.activitiesRegistry.get(id);
