@@ -34,9 +34,9 @@ namespace API
                     policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); });
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
-            
+            services.AddAuthentication();
             var builder = services.AddIdentityCore<AppUser>();
-            var identityBuilder = new IdentityBuilder(builder.UserType,builder.Services);
+            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
         }
@@ -47,7 +47,6 @@ namespace API
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseRouting();
-            app.UseAuthorization();
             app.UseCors("CorsPolicy");
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

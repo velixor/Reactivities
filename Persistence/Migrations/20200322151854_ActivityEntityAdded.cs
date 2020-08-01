@@ -7,8 +7,7 @@ namespace Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                "Activities",
+            migrationBuilder.CreateTable("Activities",
                 table => new
                 {
                     Id = table.Column<Guid>(),
@@ -24,8 +23,7 @@ namespace Persistence.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                "Activities");
+            migrationBuilder.DropTable("Activities");
         }
     }
 }

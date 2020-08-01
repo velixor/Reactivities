@@ -12,8 +12,8 @@ namespace API.Middleware
     public class ErrorHandlingMiddleware
     {
         private const string ResponseContentType = "application/json";
-        private readonly RequestDelegate _next;
         private readonly ILogger<ErrorHandlingMiddleware> _logger;
+        private readonly RequestDelegate _next;
 
         public ErrorHandlingMiddleware([NotNull] RequestDelegate next, [NotNull] ILogger<ErrorHandlingMiddleware> logger)
         {
