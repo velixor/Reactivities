@@ -1,23 +1,26 @@
 ﻿using Domain;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser>
     {
-        public DataContext(DbContextOptions options) : base(options) { }
+        public DataContext(DbContextOptions options) : base(options)
+        {
+        }
 
         public DbSet<Value> Values { get; [UsedImplicitly] set; }
         public DbSet<Activity> Activities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Value>().HasData(
-                new Value {Id = 1, Name = "Value1"},
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Value>().HasData(new Value {Id = 1, Name = "Value1"},
                 new Value {Id = 2, Name = "Value2"},
-                new Value {Id = 3, Name = "Value3"}
-            );
+                new Value {Id = 3, Name = "Value3"});
         }
     }
 }
