@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using JetBrains.Annotations;
@@ -38,11 +39,13 @@ namespace Application.User
         {
             private readonly SignInManager<AppUser> _signInManager;
             private readonly UserManager<AppUser> _userManager;
+            private readonly IJwtGenerator _jwtGenerator;
 
-            public Handler([NotNull] UserManager<AppUser> userManager, [NotNull] SignInManager<AppUser> signInManager)
+            public Handler([NotNull] UserManager<AppUser> userManager, [NotNull] SignInManager<AppUser> signInManager, [NotNull] IJwtGenerator jwtGenerator)
             {
                 _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
                 _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+                _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
             }
 
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
@@ -58,7 +61,7 @@ namespace Application.User
                     return new User
                     {
                         DisplayName = user.DisplayName,
-                        Token = "token",
+                        Token = _jwtGenerator.CreateToken(user),
                         UserName = user.UserName,
                         Image = null
                     };
