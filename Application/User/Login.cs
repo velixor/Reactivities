@@ -37,9 +37,9 @@ namespace Application.User
         [UsedImplicitly]
         public class Handler : IRequestHandler<Query, User>
         {
+            private readonly IJwtGenerator _jwtGenerator;
             private readonly SignInManager<AppUser> _signInManager;
             private readonly UserManager<AppUser> _userManager;
-            private readonly IJwtGenerator _jwtGenerator;
 
             public Handler([NotNull] UserManager<AppUser> userManager, [NotNull] SignInManager<AppUser> signInManager, [NotNull] IJwtGenerator jwtGenerator)
             {
@@ -51,11 +51,8 @@ namespace Application.User
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
-
                 if (user == null) throw new RestException(HttpStatusCode.Unauthorized);
-
                 var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-
                 if (signInResult.Succeeded)
                 {
                     return new User
