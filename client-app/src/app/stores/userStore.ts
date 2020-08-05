@@ -2,6 +2,7 @@ import {action, computed, observable, runInAction} from "mobx";
 import {IUser, IUserFormValues} from "../models/user";
 import agent from "../api/agent";
 import {RootStore} from "./rootStore";
+import {history} from "../../index";
 
 export default class UserStore {
     rootStore: RootStore;
@@ -12,7 +13,7 @@ export default class UserStore {
 
     @observable user: IUser | null = null;
 
-    @computed get isLoggedId() {
+    @computed get isLoggedIn() {
         return !!this.user
     }
 
@@ -22,8 +23,15 @@ export default class UserStore {
             runInAction("Initializing user", () => {
                 this.user = user;
             });
+            history.push('/activities')
         } catch (error) {
             console.log(error);
+            throw error;
         }
+    }
+
+    @action logout = () => {
+        this.user = null;
+        history.push('');
     }
 }
