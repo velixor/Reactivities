@@ -23,6 +23,7 @@ export default class UserStore {
             runInAction("Initializing user", () => {
                 this.user = user;
             });
+            this.rootStore.commonStore.setToken(user.token);
             history.push('/activities')
         } catch (error) {
             console.log(error);
@@ -32,6 +33,7 @@ export default class UserStore {
 
     @action logout = () => {
         this.user = null;
+        this.rootStore.commonStore.setToken(null);
         history.push('');
     }
 }
