@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -39,15 +41,31 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler([NotNull] DataContext context)
+            public Handler([NotNull] DataContext context, [NotNull] IUserAccessor userAccessor)
             {
                 _context = context ?? throw new ArgumentNullException(nameof(context));
+                _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = new Activity
+                var activity = MapRequestToActivity(request);
+                var userActivity = await GetUserActivity(activity);
+
+                await _context.Activities.AddAsync(activity, cancellationToken);
+                await _context.UserActivities.AddAsync(userActivity, cancellationToken);
+
+                var isSavedSuccess = await _context.SaveChangesAsync(cancellationToken) > 0;
+                if (isSavedSuccess) return Unit.Value;
+
+                throw new Exception("Problem saving changes");
+            }
+
+            private static Activity MapRequestToActivity(Command request)
+            {
+                return new Activity
                 {
                     Id = request.Id,
                     Category = request.Category,
@@ -57,12 +75,23 @@ namespace Application.Activities
                     Title = request.Title,
                     Venue = request.Venue
                 };
-                await _context.Activities.AddAsync(activity, cancellationToken);
+            }
 
-                var isSavedSuccess = await _context.SaveChangesAsync(cancellationToken) > 0;
-                if (isSavedSuccess) return Unit.Value;
+            private async Task<UserActivity> GetUserActivity(Activity activity)
+            {
+                return new UserActivity
+                {
+                    Activity = activity,
+                    AppUser = await GetUserForActivity(),
+                    DateJoined = DateTime.Now,
+                    IsHost = true
+                };
+            }
 
-                throw new Exception("Problem saving changes");
+            private async Task<AppUser> GetUserForActivity()
+            {
+                var username = _userAccessor.GetCurrentUsername();
+                return await _context.Users.SingleAsync(x => x.UserName == username);
             }
         }
     }
