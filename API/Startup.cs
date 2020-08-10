@@ -56,8 +56,8 @@ namespace API
 
             AddAuthentication(services);
 
+
             services.AddScoped<IUserAccessor, UserAccessor>();
-            services.AddScoped<IAppUserAccessor, AppUserAccessor>();
         }
 
         private void AddAuthentication(IServiceCollection services)
@@ -81,6 +81,9 @@ namespace API
                         ValidateIssuer = false
                     };
                 });
+
+            services.AddAuthorization(opt => { opt.AddPolicy(Constants.IsActivityHostPolicy, policyBuilder => policyBuilder.Requirements.Add(new IsHostRequirement())); });
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

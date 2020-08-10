@@ -1,7 +1,10 @@
-﻿namespace Application.Interfaces
+﻿using System.Threading.Tasks;
+using Domain;
+
+namespace Application.Interfaces
 {
     public interface IUserAccessor
     {
-        public string GetCurrentUsername();
+        Task<AppUser> GetCurrentUser();
     }
 }

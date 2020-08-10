@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Application.Activities;
 using Application.Dtos;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SolutionConstants;
 
 namespace API.Controllers
 {
@@ -29,12 +31,14 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = Constants.IsActivityHostPolicy)]
         public async Task<ActionResult<Unit>> Delete([FromRoute] Delete.Command deleteCommand)
         {
             return await Mediator.Send(deleteCommand);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = Constants.IsActivityHostPolicy)]
         public async Task<ActionResult<Unit>> Update(Guid id, [FromBody] Edit.Command command)
         {
             command.Id = id;

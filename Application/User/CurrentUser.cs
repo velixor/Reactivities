@@ -21,9 +21,9 @@ namespace Application.User
         public class Handler : IRequestHandler<Query, User>
         {
             private readonly IJwtGenerator _jwtGenerator;
-            private readonly IAppUserAccessor _userAccessor;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler([NotNull] IAppUserAccessor userAccessor, [NotNull] IJwtGenerator jwtGenerator)
+            public Handler([NotNull] IUserAccessor userAccessor, [NotNull] IJwtGenerator jwtGenerator)
             {
                 _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
                 _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
