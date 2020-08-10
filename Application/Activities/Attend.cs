@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
@@ -11,29 +13,19 @@ using Persistence;
 
 namespace Application.Activities
 {
-    public abstract class Create
+    public abstract class Attend
     {
         public class Command : IRequest
         {
-            public Guid Id { get; [UsedImplicitly] set; }
-            public string Title { get; [UsedImplicitly] set; }
-            public string Description { get; [UsedImplicitly] set; }
-            public string Category { get; [UsedImplicitly] set; }
-            public DateTime Date { get; [UsedImplicitly] set; }
-            public string City { get; [UsedImplicitly] set; }
-            public string Venue { get; [UsedImplicitly] set; }
+            public Guid Id { get; set; }
         }
 
+        [UsedImplicitly]
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Title).NotEmpty();
-                RuleFor(x => x.Description).NotEmpty();
-                RuleFor(x => x.Category).NotEmpty();
-                RuleFor(x => x.Date).NotEmpty();
-                RuleFor(x => x.City).NotEmpty();
-                RuleFor(x => x.Venue).NotEmpty();
+                RuleFor(x => x.Id).NotEqual(Guid.Empty);
             }
         }
 
@@ -51,10 +43,14 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = MapRequestToActivity(request);
-                var userActivity = await GetUserActivity(activity);
+                var activity = await _context.Activities.FindAsync(request.Id)
+                    ?? throw new RestException(HttpStatusCode.NotFound, new {Activity = "Could not find activity"});
 
-                await _context.Activities.AddAsync(activity, cancellationToken);
+                var user = await _userAccessor.GetCurrentUser();
+
+                await ThrowIfUserAlreadyAttendActivity(user, activity, cancellationToken);
+
+                var userActivity = BuildAttendance(user, activity);
                 await _context.UserActivities.AddAsync(userActivity, cancellationToken);
 
                 var isSavedSuccess = await _context.SaveChangesAsync(cancellationToken) > 0;
@@ -63,31 +59,26 @@ namespace Application.Activities
                 throw new Exception("Problem saving changes");
             }
 
-            private static Activity MapRequestToActivity(Command request)
+            private async Task ThrowIfUserAlreadyAttendActivity(AppUser user, Activity activity, CancellationToken cancellationToken)
             {
-                return new Activity
-                {
-                    Id = request.Id,
-                    Category = request.Category,
-                    City = request.City,
-                    Date = request.Date,
-                    Description = request.Description,
-                    Title = request.Title,
-                    Venue = request.Venue
-                };
+                var isUserActivityExist = await _context.UserActivities.AnyAsync(x =>
+                    x.AppUserId == user.Id &&
+                    x.ActivityId == activity.Id, cancellationToken);
+
+                if (isUserActivityExist)
+                    throw new RestException(HttpStatusCode.BadRequest, new {UserActivity = "User already attend this activity"});
             }
 
-            private async Task<UserActivity> GetUserActivity(Activity activity)
+            private UserActivity BuildAttendance(AppUser user, Activity activity)
             {
                 return new UserActivity
                 {
+                    AppUser = user,
                     Activity = activity,
-                    AppUser = await _userAccessor.GetCurrentUser(),
                     DateJoined = DateTime.Now,
-                    IsHost = true
+                    IsHost = false
                 };
             }
-
         }
     }
 }

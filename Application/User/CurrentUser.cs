@@ -21,22 +21,18 @@ namespace Application.User
         public class Handler : IRequestHandler<Query, User>
         {
             private readonly IJwtGenerator _jwtGenerator;
-            private readonly IUserAccessor _userAccessor;
-            private readonly UserManager<AppUser> _userManager;
+            private readonly IAppUserAccessor _userAccessor;
 
-            public Handler([NotNull] UserManager<AppUser> userManager, [NotNull] IUserAccessor userAccessor, [NotNull] IJwtGenerator jwtGenerator)
+            public Handler([NotNull] IAppUserAccessor userAccessor, [NotNull] IJwtGenerator jwtGenerator)
             {
-                _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
                 _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
                 _jwtGenerator = jwtGenerator ?? throw new ArgumentNullException(nameof(jwtGenerator));
             }
 
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
-                var username = _userAccessor.GetCurrentUsername();
-                var user = await _userManager.FindByNameAsync(username);
-                if (user != default) return MapAppUserToUser(user);
-                throw new RestException(HttpStatusCode.InternalServerError, new {Error = "Something gone wrong"});
+                var user = await _userAccessor.GetCurrentUser();
+                return MapAppUserToUser(user);
             }
 
             private User MapAppUserToUser(AppUser user)

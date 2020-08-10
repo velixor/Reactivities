@@ -57,6 +57,7 @@ namespace API
             AddAuthentication(services);
 
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IAppUserAccessor, AppUserAccessor>();
         }
 
         private void AddAuthentication(IServiceCollection services)

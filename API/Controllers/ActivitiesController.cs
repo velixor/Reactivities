@@ -40,5 +40,17 @@ namespace API.Controllers
             command.Id = id;
             return await Mediator.Send(command);
         }
+
+        [HttpPost("{id}/attend")]
+        public async Task<ActionResult<Unit>> Attend([FromRoute] Attend.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpDelete("{id}/attend")]
+        public async Task<ActionResult<Unit>> Unattend([FromRoute] Unattend.Command command)
+        {
+            return await Mediator.Send(command);
+        }
     }
 }
