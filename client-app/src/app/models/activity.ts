@@ -1,3 +1,5 @@
+import {IAttendee} from "./attendee";
+
 export interface IActivity {
     id: string;
     title: string;
@@ -6,6 +8,9 @@ export interface IActivity {
     date: Date;
     city: string;
     venue: string;
+    attendees: IAttendee[];
+    isGoing: boolean;
+    isHost: boolean;
 }
 
 export interface IActivityFormValues extends Partial<IActivity> {
@@ -25,7 +30,7 @@ export class ActivityFormValues implements IActivityFormValues {
     constructor(init?: IActivityFormValues) {
         if (init && init.date) {
             init.time = init.date;
-        }  
+        }
         Object.assign(this, init);
     }
 }
