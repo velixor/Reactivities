@@ -17,11 +17,14 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({activity}) => {
                             <Item.Description>Hosted
                                 by <strong>{activity.attendees.find(x => x.isHost)!.displayName}</strong>
                             </Item.Description>
+                            {/* eslint-disable-next-line no-mixed-operators */}
                             {activity.isHost &&
                             <Item.Description>
                                 <Label basic color={"orange"} content={'You are host'}/>
                             </Item.Description>
+                            // eslint-disable-next-line no-mixed-operators
                             ||
+                            // eslint-disable-next-line no-mixed-operators
                             activity.isGoing &&
                             <Item.Description>
                                 <Label basic color={"green"} content={'You are going this activity'}/>
