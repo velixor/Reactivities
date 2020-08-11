@@ -143,4 +143,7 @@ export default class ActivityStore {
             console.log(error);
         }
     }
+    @action attendActivity = () => {
+
+    }
 }

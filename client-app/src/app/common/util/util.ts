@@ -1,5 +1,6 @@
 import {IActivity} from "../../models/activity";
 import {IUser} from "../../models/user";
+import {IAttendee} from "../../models/attendee";
 
 export const combineDateAndTime = (date: Date, time: Date) => {
     const timeString = time.getHours() + ':' + time.getMinutes() + ':00';
@@ -19,5 +20,14 @@ export const setActivityProps = (activity: IActivity, user: IUser) => {
     if (userAttendee != undefined) {
         activity.isGoing = true;
         activity.isHost = userAttendee.isHost;
+    }
+}
+
+export const createAttendee = (user: IUser): IAttendee => {
+    return {
+        displayName: user.displayName,
+        isHost: false,
+        userName: user.userName,
+        image: user.image!
     }
 }
