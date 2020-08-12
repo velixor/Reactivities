@@ -23,4 +23,5 @@ public class Handler : IRequestHandler&lt;Query, $Type$&gt;
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=689682915E411843AF627C3BD6F9984B/Field/=Name/Order/@EntryValue">-1</s:Int64>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=689682915E411843AF627C3BD6F9984B/Field/=Body/Order/@EntryValue">1</s:Int64>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=689682915E411843AF627C3BD6F9984B/Field/=Type/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Cloudinary/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Unattend/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
