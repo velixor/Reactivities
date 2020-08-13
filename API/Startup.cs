@@ -45,6 +45,12 @@ namespace API
                 })
                 .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>());
 
+            services.AddStackExchangeRedisCache(opt =>
+            {
+                opt.Configuration = "localhost";
+                opt.InstanceName = "Reactivities";
+            });
+
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy",
