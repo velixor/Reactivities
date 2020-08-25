@@ -37,7 +37,7 @@ namespace API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseNpgsql(Configuration.GetConnectionString("PostgresConnection"));
             });
             services.AddControllers(opt =>
                 {
@@ -45,6 +45,12 @@ namespace API
                     opt.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>());
+
+            services.AddStackExchangeRedisCache(opt =>
+            {
+                opt.Configuration = "localhost";
+                opt.InstanceName = "Reactivities";
+            });
 
             services.AddCors(opt =>
             {

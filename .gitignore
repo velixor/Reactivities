@@ -12,3 +12,5 @@ appsettings.Development.json
 /.vs/Reactivities/config/applicationhost.config
 /API/reactivities.db-shm
 /API/reactivities.db-wal
+/API/published/*
+/publish/*
