@@ -10,3 +10,5 @@ appsettings.Development.json
 /.vs/Reactivities/v16/.suo
 /API/API.csproj.user
 /.vs/Reactivities/config/applicationhost.config
+/API/published/*
+/publish/*
