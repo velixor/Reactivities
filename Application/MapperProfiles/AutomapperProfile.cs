@@ -26,11 +26,7 @@ namespace Application.MapperProfiles
         private void User()
         {
             CreateMap<AppUser, Profiles.Profile>()
-                .ForMember(x => x.Image, opt =>
-                {
-                    opt.PreCondition(user => user.Photos.Any(ph => ph.IsMain));
-                    opt.MapFrom(x => x.Photos.FirstOrDefault(ph => ph.IsMain).Url);
-                });
+                .ForMember(x => x.Image, opt => opt.MapFrom(x => x.Photos.FirstOrDefault(ph => ph.IsMain).Url));
         }
     }
 }
