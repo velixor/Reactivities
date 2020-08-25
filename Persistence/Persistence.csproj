@@ -9,6 +9,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Migrations\20200813205827_InitPostgres.Designer.cs">
+      <DependentUpon>20200813205827_InitPostgres.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
