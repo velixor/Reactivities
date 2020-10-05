@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Application.Interfaces;
 using Application.Photos;
 using CloudinaryDotNet;
@@ -10,6 +11,8 @@ namespace Infrastructure.Photos
 {
     public class PhotoAccessor : IPhotoAccessor
     {
+        private const string DeletionOkResult = "ok";
+
         private readonly Cloudinary _cloudinary;
 
         public PhotoAccessor(IOptions<CloudinarySettings> config)
@@ -19,13 +22,13 @@ namespace Infrastructure.Photos
             _cloudinary = new Cloudinary(account);
         }
 
-        public PhotoUploadResult AddPhoto(IFormFile file)
+        public async Task<PhotoUploadResult> AddPhoto(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();
 
             if (file.Length > 0)
             {
-                using var stream = file.OpenReadStream();
+                await using var stream = file.OpenReadStream();
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
@@ -35,7 +38,7 @@ namespace Infrastructure.Photos
                         .Crop("fill")
                         .Gravity("face")
                 };
-                uploadResult = _cloudinary.Upload(uploadParams);
+                uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }
 
             if (uploadResult.Error != null)
@@ -48,9 +51,21 @@ namespace Infrastructure.Photos
             };
         }
 
-        public string DeletePhoto(string publicId)
+        public async Task<PhotoDeletionResult> DeletePhoto(string publicId)
         {
-            throw new NotImplementedException();
+            var deletionParams = new DeletionParams(publicId);
+            var deletionResult = await _cloudinary.DestroyAsync(deletionParams);
+
+            if (deletionResult.Error != null) throw new Exception(deletionResult.Error.Message);
+
+            return DefinePhotoDeletionResult(deletionResult);
+        }
+
+        private PhotoDeletionResult DefinePhotoDeletionResult(DeletionResult deletionResult)
+        {
+            return deletionResult.Result == DeletionOkResult
+                ? PhotoDeletionResult.Ok
+                : PhotoDeletionResult.NotOk;
         }
     }
 }

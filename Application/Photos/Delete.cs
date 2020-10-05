@@ -2,24 +2,23 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Application.Interfaces;
-using Domain;
 using JetBrains.Annotations;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Persistence;
 
 namespace Application.Photos
 {
-    public abstract class Add
+    public abstract class Delete
     {
-        public class Command : IRequest<Photo>
+        public class Command : IRequest
         {
-            public IFormFile File { get; set; }
+            public string Id { get; set; }
         }
 
         [UsedImplicitly]
-        public class Handler : IRequestHandler<Command, Photo>
+        public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
             private readonly IPhotoAccessor _photoAccessor;
@@ -32,23 +31,21 @@ namespace Application.Photos
                 _photoAccessor = photoAccessor ?? throw new ArgumentNullException(nameof(photoAccessor));
             }
 
-            public async Task<Photo> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var photoUploadResult = await _photoAccessor.AddPhoto(request.File);
                 var user = await _userAccessor.GetCurrentUser();
-                var photo = new Photo
-                {
-                    Url = photoUploadResult.Url,
-                    Id = photoUploadResult.PublicId
-                };
+                var photo = user.Photos.SingleOrDefault(x => x.Id == request.Id);
 
-                if (!user.Photos.Any(x => x.IsMain))
-                    photo.IsMain = true;
+                if (photo == default) throw new PhotoNotFoundException();
 
-                user.Photos.Add(photo);
+                if (photo.IsMain) throw new MainPhotoDeletionException();
+
+                _context.Photos.Remove(photo);
 
                 var isSavedSuccess = await _context.SaveChangesAsync(cancellationToken) > 0;
-                if (isSavedSuccess) return photo;
+                var deletionResult = await _photoAccessor.DeletePhoto(photo.Id);
+
+                if (isSavedSuccess && deletionResult == PhotoDeletionResult.Ok) return Unit.Value;
 
                 throw new Exception("Problem saving changes");
             }

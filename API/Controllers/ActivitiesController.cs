@@ -35,7 +35,7 @@ namespace API.Controllers
             var cacheKey = query.Id.ToString();
             ActivityDto activity;
             string serializedActivity;
-            
+
             var encodedActivity = await _cache.GetAsync(cacheKey);
 
             if (encodedActivity != null)

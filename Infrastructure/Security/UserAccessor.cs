@@ -14,8 +14,8 @@ namespace Infrastructure.Security
 {
     public class UserAccessor : IUserAccessor
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly UserManager<AppUser> _userManager;
 
         public UserAccessor(UserManager<AppUser> userManager, [NotNull] IHttpContextAccessor contextAccessor)
         {

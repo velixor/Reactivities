@@ -36,13 +36,10 @@ namespace Persistence
                         DisplayName = "Tom",
                         UserName = "tom",
                         Email = "tom@test.com"
-                    },
+                    }
                 };
 
-                foreach (var user in users)
-                {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
-                }
+                foreach (var user in users) await userManager.CreateAsync(user, "Pa$$w0rd");
             }
 
             if (!context.Activities.Any())
@@ -88,7 +85,7 @@ namespace Persistence
                                 AppUserId = "a",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(-1)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -112,7 +109,7 @@ namespace Persistence
                                 AppUserId = "a",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(1)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -136,7 +133,7 @@ namespace Persistence
                                 AppUserId = "a",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(2)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -160,7 +157,7 @@ namespace Persistence
                                 AppUserId = "c",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(3)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -202,7 +199,7 @@ namespace Persistence
                                 AppUserId = "b",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(5)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -226,7 +223,7 @@ namespace Persistence
                                 AppUserId = "b",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(6)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -250,7 +247,7 @@ namespace Persistence
                                 AppUserId = "c",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(7)
-                            },
+                            }
                         }
                     },
                     new Activity
@@ -274,7 +271,7 @@ namespace Persistence
                                 AppUserId = "a",
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(8)
-                            },
+                            }
                         }
                     }
                 };

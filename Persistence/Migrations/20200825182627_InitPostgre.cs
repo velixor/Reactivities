@@ -8,9 +8,8 @@ namespace Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Activities",
-                columns: table => new
+            migrationBuilder.CreateTable("Activities",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: true),
@@ -20,28 +19,20 @@ namespace Persistence.Migrations
                     City = table.Column<string>(nullable: true),
                     Venue = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Activities", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Activities", x => x.Id); });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetRoles",
+                table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_AspNetRoles", x => x.Id); });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetUsers",
+                table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
@@ -61,27 +52,19 @@ namespace Persistence.Migrations
                     DisplayName = table.Column<string>(nullable: true),
                     Bio = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_AspNetUsers", x => x.Id); });
 
-            migrationBuilder.CreateTable(
-                name: "Values",
-                columns: table => new
+            migrationBuilder.CreateTable("Values",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Values", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Values", x => x.Id); });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetRoleClaims",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
@@ -92,17 +75,15 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                    table.ForeignKey("FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        x => x.RoleId,
+                        "AspNetRoles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetUserClaims",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
@@ -113,17 +94,15 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                    table.ForeignKey("FK_AspNetUserClaims_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetUserLogins",
+                table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
@@ -132,42 +111,37 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new {x.LoginProvider, x.ProviderKey});
+                    table.ForeignKey("FK_AspNetUserLogins_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetUserRoles",
+                table => new
                 {
                     UserId = table.Column<string>(nullable: false),
                     RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new {x.UserId, x.RoleId});
+                    table.ForeignKey("FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        x => x.RoleId,
+                        "AspNetRoles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                    table.ForeignKey("FK_AspNetUserRoles_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
+            migrationBuilder.CreateTable("AspNetUserTokens",
+                table => new
                 {
                     UserId = table.Column<string>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
@@ -176,18 +150,16 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new {x.UserId, x.LoginProvider, x.Name});
+                    table.ForeignKey("FK_AspNetUserTokens_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Photos",
-                columns: table => new
+            migrationBuilder.CreateTable("Photos",
+                table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: true),
@@ -197,17 +169,15 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Photos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Photos_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                    table.ForeignKey("FK_Photos_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserActivities",
-                columns: table => new
+            migrationBuilder.CreateTable("UserActivities",
+                table => new
                 {
                     AppUserId = table.Column<string>(nullable: false),
                     ActivityId = table.Column<Guid>(nullable: false),
@@ -216,113 +186,90 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserActivities", x => new { x.AppUserId, x.ActivityId });
-                    table.ForeignKey(
-                        name: "FK_UserActivities_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
+                    table.PrimaryKey("PK_UserActivities", x => new {x.AppUserId, x.ActivityId});
+                    table.ForeignKey("FK_UserActivities_Activities_ActivityId",
+                        x => x.ActivityId,
+                        "Activities",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserActivities_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                    table.ForeignKey("FK_UserActivities_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Values",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
+            migrationBuilder.InsertData("Values",
+                new[] {"Id", "Name"},
+                new object[,]
                 {
-                    { 1, "Value1" },
-                    { 2, "Value2" },
-                    { 3, "Value3" }
+                    {1, "Value1"},
+                    {2, "Value2"},
+                    {3, "Value3"}
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
+            migrationBuilder.CreateIndex("IX_AspNetRoleClaims_RoleId",
+                "AspNetRoleClaims",
+                "RoleId");
 
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
+            migrationBuilder.CreateIndex("RoleNameIndex",
+                "AspNetRoles",
+                "NormalizedName",
                 unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
+            migrationBuilder.CreateIndex("IX_AspNetUserClaims_UserId",
+                "AspNetUserClaims",
+                "UserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
+            migrationBuilder.CreateIndex("IX_AspNetUserLogins_UserId",
+                "AspNetUserLogins",
+                "UserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId");
+            migrationBuilder.CreateIndex("IX_AspNetUserRoles_RoleId",
+                "AspNetUserRoles",
+                "RoleId");
 
-            migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
+            migrationBuilder.CreateIndex("EmailIndex",
+                "AspNetUsers",
+                "NormalizedEmail");
 
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
+            migrationBuilder.CreateIndex("UserNameIndex",
+                "AspNetUsers",
+                "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Photos_AppUserId",
-                table: "Photos",
-                column: "AppUserId");
+            migrationBuilder.CreateIndex("IX_Photos_AppUserId",
+                "Photos",
+                "AppUserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_UserActivities_ActivityId",
-                table: "UserActivities",
-                column: "ActivityId");
+            migrationBuilder.CreateIndex("IX_UserActivities_ActivityId",
+                "UserActivities",
+                "ActivityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+            migrationBuilder.DropTable("AspNetRoleClaims");
 
-            migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+            migrationBuilder.DropTable("AspNetUserClaims");
 
-            migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+            migrationBuilder.DropTable("AspNetUserLogins");
 
-            migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+            migrationBuilder.DropTable("AspNetUserRoles");
 
-            migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+            migrationBuilder.DropTable("AspNetUserTokens");
 
-            migrationBuilder.DropTable(
-                name: "Photos");
+            migrationBuilder.DropTable("Photos");
 
-            migrationBuilder.DropTable(
-                name: "UserActivities");
+            migrationBuilder.DropTable("UserActivities");
 
-            migrationBuilder.DropTable(
-                name: "Values");
+            migrationBuilder.DropTable("Values");
 
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
+            migrationBuilder.DropTable("AspNetRoles");
 
-            migrationBuilder.DropTable(
-                name: "Activities");
+            migrationBuilder.DropTable("Activities");
 
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
+            migrationBuilder.DropTable("AspNetUsers");
         }
     }
 }

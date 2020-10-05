@@ -16,8 +16,8 @@ namespace Infrastructure.Security
 
     public class IsHostRequirementHandler : AuthorizationHandler<IsHostRequirement>
     {
-        private readonly HttpContext _httpContext;
         private readonly DataContext _dataContext;
+        private readonly HttpContext _httpContext;
 
         public IsHostRequirementHandler([NotNull] IHttpContextAccessor httpContext, [NotNull] DataContext dataContext)
         {

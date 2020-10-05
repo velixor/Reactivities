@@ -7,7 +7,6 @@ using AutoMapper;
 using Domain;
 using JetBrains.Annotations;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities

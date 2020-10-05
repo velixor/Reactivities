@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Errors;
 using Application.Interfaces;
 using Domain;
 using JetBrains.Annotations;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace Application.User
 {

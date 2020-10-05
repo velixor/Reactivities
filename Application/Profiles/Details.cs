@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
-using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
