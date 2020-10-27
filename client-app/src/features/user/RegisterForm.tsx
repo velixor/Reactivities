@@ -9,7 +9,7 @@ import { combineValidators, isRequired } from 'revalidate';
 import ErrorMessage from '../../app/common/form/ErrorMessage';
 
 const validate = combineValidators({
-  username: isRequired('Username'),
+  userName: isRequired('Username'),
   displayName: isRequired('DisplayName'),
   email: isRequired('Email'),
   password: isRequired('Password')
@@ -41,7 +41,7 @@ const RegisterForm = () => {
             color='teal'
             textAlign='center'
           />
-          <Field name='username' component={TextInput} placeholder='Username' />
+          <Field name='userName' component={TextInput} placeholder='Username' />
           <Field
             name='displayName'
             component={TextInput}
