@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Application.Photos;
 using Domain;
 using MediatR;
@@ -16,6 +17,12 @@ namespace API.Controllers
 
         [HttpDelete("{Id}")]
         public async Task<ActionResult<Unit>> Delete([FromRoute] Delete.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("{id}/setMain")]
+        public async Task<ActionResult<Unit>> Name([FromRoute] SetMain.Command command)
         {
             return await Mediator.Send(command);
         }
