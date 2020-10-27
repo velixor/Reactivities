@@ -20,7 +20,8 @@ namespace Application.MapperProfiles
 
             CreateMap<UserActivity, AttendeeDto>()
                 .ForMember(x => x.DisplayName, opt => opt.MapFrom(x => x.AppUser.DisplayName))
-                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.AppUser.UserName));
+                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.AppUser.UserName))
+                .ForMember(x => x.Image, opt => opt.MapFrom(x => x.AppUser.MainPhoto.Url));
         }
 
         private void User()
