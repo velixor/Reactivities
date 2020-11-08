@@ -1,10 +1,17 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {Grid, Header, Image} from 'semantic-ui-react';
 import {observer} from 'mobx-react-lite';
 import PhotoWidgetDropzone from "./PhotoWidgetDropzone";
 
+
 const PhotoUploadWidget = () => {
     const [files, setFiles] = useState<any[]>([]);
+
+    useEffect(() => {
+        return () => {
+            files.forEach((file) => URL.revokeObjectURL(file.preview));
+        };
+    });
 
     return (
         <Fragment>
