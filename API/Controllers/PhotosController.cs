@@ -15,14 +15,14 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> Delete([FromRoute] Delete.Command command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPost("{id}/setMain")]
-        public async Task<ActionResult<Unit>> Name([FromRoute] SetMain.Command command)
+        public async Task<ActionResult<Unit>> SetMain([FromRoute] SetMain.Command command)
         {
             return await Mediator.Send(command);
         }
