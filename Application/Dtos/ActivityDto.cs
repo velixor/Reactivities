@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application.Comments;
 
 namespace Application.Dtos
 {
@@ -13,5 +14,6 @@ namespace Application.Dtos
         public string City { get; set; }
         public string Venue { get; set; }
         public ICollection<AttendeeDto> Attendees { get; set; }
+        public ICollection<CommentDto> Comments { get; set; }
     }
 }

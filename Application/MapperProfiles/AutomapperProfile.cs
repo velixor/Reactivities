@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Application.Comments;
 using Application.Dtos;
 using AutoMapper;
 using Domain;
@@ -11,23 +12,32 @@ namespace Application.MapperProfiles
         {
             Activity();
             User();
+            Comment();
         }
 
         private void Activity()
         {
             CreateMap<Activity, ActivityDto>()
-                .ForMember(x => x.Attendees, opt => opt.MapFrom(x => x.UserActivities));
+                .ForMember(d => d.Attendees, opt => opt.MapFrom(s => s.UserActivities));
 
             CreateMap<UserActivity, AttendeeDto>()
-                .ForMember(x => x.DisplayName, opt => opt.MapFrom(x => x.AppUser.DisplayName))
-                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.AppUser.UserName))
-                .ForMember(x => x.Image, opt => opt.MapFrom(x => x.AppUser.MainPhoto.Url));
+                .ForMember(d => d.DisplayName, opt => opt.MapFrom(s => s.AppUser.DisplayName))
+                .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.AppUser.UserName))
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.AppUser.MainPhoto.Url));
         }
 
         private void User()
         {
             CreateMap<AppUser, Profiles.Profile>()
-                .ForMember(x => x.Image, opt => opt.MapFrom(x => x.Photos.FirstOrDefault(ph => ph.IsMain).Url));
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Photos.FirstOrDefault(ph => ph.IsMain).Url));
+        }
+
+        private void Comment()
+        {
+            CreateMap<Comment, CommentDto>()
+                .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.Author.UserName))
+                .ForMember(d => d.DisplayName, opt => opt.MapFrom(s => s.Author.DisplayName))
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Author.Photos.FirstOrDefault(ph => ph.IsMain).IsMain));
         }
     }
 }
