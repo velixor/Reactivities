@@ -37,7 +37,7 @@ namespace Application.MapperProfiles
             CreateMap<Comment, CommentDto>()
                 .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.Author.UserName))
                 .ForMember(d => d.DisplayName, opt => opt.MapFrom(s => s.Author.DisplayName))
-                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Author.Photos.FirstOrDefault(ph => ph.IsMain).IsMain));
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Author.Photos.FirstOrDefault(ph => ph.IsMain).Url));
         }
     }
 }
